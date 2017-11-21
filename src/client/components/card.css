@@ -1,0 +1,37 @@
+.card-row {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 2em;
+}
+
+.card-row-gap {
+    flex-grow: 2;
+}
+
+.card-pile {
+    margin: 5px;
+    position: relative;
+    display: inline-block;
+    border: dashed 2px #808080;
+    border-radius: 5px;
+    width: 12%;
+}
+
+.card-pile-frame {
+   margin-top: 140%;
+}
+
+img.card {
+    position: absolute;
+    height: auto;
+    width: 100%;
+}
+
+.card-selected {
+    border: solid 5px #003cff8e;
+    border-radius: 5px;
+}

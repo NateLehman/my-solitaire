@@ -1,4 +1,5 @@
-# CS 4288: Web-based System Architecture 
+# CS 4288: Web-based System Architecture
+
 ## Programming Assignment 6
 
 ## Overview
@@ -8,11 +9,11 @@ This is it!  In this assignment you will get to functional web-based Klondike So
 On the Derby Day your application will be evaluated by a number of other students in class.  Your application will earn points based on its capabilities (see below).
 
 * 30% of your grade will be awarded based on a manual code review by the instructor
-* 70+% of your grade will be based on the Derby Day peer review  
+* 70+% of your grade will be based on the Derby Day peer review
 * It is possible to earn more than 100% of the points
 * You are free to change, add or remove any code within your application.  All reused code (not recorded into package.json) must be attributed
 
-### Here are the places to earn (or lose) points:
+### Here are the places to earn (or lose) points
 
 1. (30 points - mandatory) Instructor code review.  Is it clean, well-structured, modular code.
 
@@ -46,7 +47,6 @@ On the Derby Day your application will be evaluated by a number of other student
 
 * 10 points - Awarded to the one student with the smallest client JS bundle (```/public/main.js```).  A tie will split the points
 
-
-## Submission:
+## Submission
 
 You must still commit your code to your repo by the start of class on Derby Day.  Failure to do so will result in the loss of the 30 points from code review.  Failure to publicly host the application during the Derby will result in the loss of 70+% of your points.  You have to make this happen.
