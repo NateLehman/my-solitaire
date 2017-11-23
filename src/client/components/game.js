@@ -5,6 +5,10 @@
 import React, { Component }     from 'react';
 import { withRouter }           from 'react-router';
 
+import { connect }                  from 'react-redux';
+
+import { gameFetch } from '../actions/game';
+
 /*************************************************************************/
 
 import { Pile } from './pile';
@@ -22,13 +26,12 @@ const nextCardVals = {
     '10': 'jack',
     'jack': 'queen',
     'queen': 'king'
-}
+};
 
 class Game extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            target: undefined,
             startDrag: { x: 0, y: 0 },
             pile1: [],
             pile2: [],
@@ -54,6 +57,8 @@ class Game extends Component {
     }
     
     componentDidMount() {
+        this.props.dispatch(gameFetch(this.props.match.params.id));
+
         $.ajax({
             url: `/v1/game/${this.props.match.params.id}`
         }).then(data => {
@@ -201,6 +206,8 @@ class Game extends Component {
     }
 
     render() {
+        console.log(this.props);
+        console.log(this.state);
         return <div style={{ height: '100%' }} onClick={this.onBoardClick}>
             <div className="card-row">
                 <Pile
@@ -289,4 +296,8 @@ class Game extends Component {
     }
 }
 
-export default withRouter(Game);
+const GameConnect = connect(store => ({
+    state: store.game
+}))(Game)
+
+export default withRouter(GameConnect);

@@ -8,7 +8,14 @@ module.exports = {
     context: path.join(__dirname, "/src/client"),
     entry: {
         main: "./main",
-        vendor: ["jquery", "lodash", "react", "react-dom", "react-router"]
+        vendor: [
+            "jquery",
+            "lodash",
+            "axios",
+            "react",
+            "react-dom",
+            "react-router"
+        ]
     },
     output: {
         path: path.join(__dirname, "/public/js/"),
@@ -44,7 +51,8 @@ module.exports = {
         new webpack.ProvidePlugin({
             "$":        "jquery",
             "jQuery":   "jquery",
-            "_":        "lodash"
+            "_":        "lodash",
+            "axios":    "axios",
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: "vendor",

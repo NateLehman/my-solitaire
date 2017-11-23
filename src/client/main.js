@@ -6,6 +6,13 @@ import React, { Component }     from 'react';
 import { render }               from 'react-dom';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider }                     from 'react-redux';
+import logger from 'redux-logger';
+import promise from 'redux-promise-middleware';
+
+import { gameReducer } from './reducers/game';
+
 import Header                   from './components/header';
 import Landing                  from './components/landing';
 import Login                    from './components/login';
@@ -21,6 +28,16 @@ require('./app.css');
 
 /*************************************************************************/
 
+const store = createStore(
+    combineReducers({
+        game: gameReducer
+    }),
+    applyMiddleware(
+        logger,
+        promise()
+    )
+);
+
 class MyApp extends Component {
     constructor(props) {
         super(props);
@@ -31,7 +48,11 @@ class MyApp extends Component {
     }
 
     render() {
-        return <BrowserRouter>
+
+
+
+        return <Provider store={store}>
+        <BrowserRouter>
             <div>
                 <Header user={this.user}/>
                 <Route exact path="/" component={Landing}/>
@@ -59,7 +80,8 @@ class MyApp extends Component {
                 }}/>
                 <Route path="/results/:id" render={props => <Results user={this.user}/>}/>
             </div>
-        </BrowserRouter>;
+        </BrowserRouter>
+        </Provider>;
     }
 }
 
@@ -112,3 +134,6 @@ render(
     <MyApp/>,
     document.getElementById('mainDiv')
 );
+
+// Put store into the global
+window.store = store;
