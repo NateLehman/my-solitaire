@@ -52,8 +52,8 @@
     "webpack": "^3.9.1"
   },
   "scripts": {
-    "build": "webpack",
-    "build-watch": "webpack --watch",
+    "build": "./node_modules/.bin/webpack",
+    "build-watch": "./node_modules/.bin/webpack --watch",
     "test": "mocha --recursive",
     "start": "node ./src/server/index.js",
     "debug": "nodemon --inspect=9229 ./src/server/index.js",
