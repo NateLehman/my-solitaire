@@ -1,7 +1,7 @@
 {
-  "name": "assignment5",
+  "name": "assignment6",
   "version": "1.0.0",
-  "description": "Assignment 5",
+  "description": "Assignment 6",
   "main": "/src/server/index.js",
   "dependencies": {
     "ajv": "^5.4.0",

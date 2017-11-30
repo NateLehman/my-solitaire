@@ -10,7 +10,7 @@ let path            = require('path'),
     mongoose        = require('mongoose');
 
 mongoose.Promise = global.Promise;
-let port = process.env.PORT ? process.env.PORT : 8080;
+let port = process.env.PORT ? process.env.PORT : 80;
 let env = process.env.NODE_ENV ? process.env.NODE_ENV : 'dev';
 
 /**********************************************************************************************************/
@@ -23,8 +23,8 @@ app.engine('pug', require('pug').__express);
 app.set('views', __dirname);
 // Setup pipeline session support
 const redisOptions = {
-    host: 'localhost',
-    port: '32769',
+    host: process.env['REDIS_URL'],
+    port: '6379',
 };
 app.use(session({
     name: 'session',
@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let options = {
     useMongoClient: true
 };
-mongoose.connect('mongodb://localhost:32768/lehmann', options)
+mongoose.connect(process.env['MONGODB_URI'], options)
     .then(() => {
         console.log('\t MongoDB connected');
 
