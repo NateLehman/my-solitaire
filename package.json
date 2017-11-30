@@ -57,7 +57,7 @@
     "test": "mocha --recursive",
     "start": "node ./src/server/index.js",
     "debug": "nodemon --inspect=9229 ./src/server/index.js",
-    "postinstall": "webpack -p --config ./webpack.prod.config.js --progress"
+    "postinstall": "./node_modules/.bin/webpack -p --config ./webpack.prod.config.js --progress"
   },
   "author": "G. Hemingway",
   "license": "ISC"
