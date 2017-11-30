@@ -23,8 +23,7 @@ app.engine('pug', require('pug').__express);
 app.set('views', __dirname);
 // Setup pipeline session support
 const redisOptions = {
-    host: process.env['REDIS_URL'],
-    port: '6379',
+    url: process.env['REDIS_URL']
 };
 app.use(session({
     name: 'session',
