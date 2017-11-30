@@ -2,7 +2,9 @@
 "use strict";
 
 let mongoose            = require('mongoose'),
-    Schema              = mongoose.Schema;
+    Schema              = mongoose.Schema,
+    Solitare            = require('../solitare'),
+    _                   = require('lodash');
 
 /***************** User Model *******************/
 
@@ -43,6 +45,7 @@ let Game = new Schema({
     start:      { type: Date },
     end:        { type: Date },
     state:      { type: [KlondikeGameState] },
+    availableMoves: { type: [KlondikeMove] },
     game:       { type: String, required: true, enum: [
         'klondike',
         'pyramid',

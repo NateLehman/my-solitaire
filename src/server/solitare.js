@@ -159,7 +159,7 @@ let validMoves = state => {
                     ? canPlaceCardTableau(card, dest.top) : true)
                 .filter(dest => (foundationPiles.includes(dest.pile))
                     ? canPlaceCardFoundation(card, dest.top) : true)
-                .map(dest => ({ cards: state[srcPile].slice(index), src: srcPile, dst: dest.pile})))));
+                .map(dest => ({cards: state[srcPile].slice(index), src: srcPile, dst: dest.pile})))));
 
     const drawMove = state.draw.length 
         ? { cards: _.takeRight(state.draw, state.drawCount).reverse(), src: 'draw', dst: 'discard' }

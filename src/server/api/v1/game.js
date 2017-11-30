@@ -68,29 +68,44 @@ module.exports = app => {
 
     // Fetch game information
     app.get('/v1/game/:id', (req, res) => {
-       if (!req.session.user) {
-           res.status(401).send({ error: 'unauthorized' });
-       } else {
-           app.models.Game.findById(req.params.id)
-               .then(
-                   game => {
-                       if (!game) {
-                           res.status(404).send({error: `unknown game: ${req.params.id}`});
-                       } else {
-                           const state = _.last(game.state).toJSON();
-                           let results = _.pick(game.toJSON(), 'start', 'moves', 'winner', 'score', 'drawCount', 'color', 'active');
-                           results.start = Date.parse(results.start);
-                           results.cards_remaining = 52 - (state.stack1.length + state.stack2.length + state.stack3.length + state.stack4.length);
-                           res.status(200).send(_.extend(results, state));
-                       }
-                   }, err => {
-                       console.log(`Game.get failure: ${err}`);
-                       res.status(404).send({error: `unknown game: ${req.params.id}`});
-                   }
-               );
-       }
+        if (!req.session.user) {
+            res.status(401).send({error: 'unauthorized'});
+            return;
+        }
+
+        app.models.Game.findById(req.params.id)
+            .then(game => {
+                if (!game) {
+                    res.status(404).send({error: `unknown game: ${req.params.id}`});
+                } else {
+                    const state = _.last(game.state).toJSON();
+                    const results = _.pick(
+                        game.toJSON(),
+                        'start',
+                        'moves',
+                        'winner',
+                        'score',
+                        'drawCount',
+                        'color',
+                        'active'
+                    );
+                    results.start = Date.parse(results.start);
+                    results.cards_remaining = 52 - (
+                        state.stack1.length + 
+                        state.stack2.length + 
+                        state.stack3.length + 
+                        state.stack4.length
+                    );
+                    res.status(200).send(_.extend(results, state));
+                }
+            })
+            .catch(err => {
+                console.log(`Game.get failure: ${err}`);
+                res.status(404).send({error: `unknown game: ${req.params.id}`});
+            });
     });
 
+    // attempt move
     app.put('/v1/game/:id', (req, res) => {
         if (!req.session.user) {
             res.status(401).send({ error: 'unauthorized' });

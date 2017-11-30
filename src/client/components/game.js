@@ -206,8 +206,6 @@ class Game extends Component {
     }
 
     render() {
-        console.log(this.props);
-        console.log(this.state);
         return <div style={{ height: '100%' }} onClick={this.onBoardClick}>
             <div className="card-row">
                 <Pile
