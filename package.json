@@ -53,11 +53,11 @@
   },
   "scripts": {
     "build": "./node_modules/.bin/webpack",
+    "postinstall": "./node_modules/.bin/webpack -p --config ./webpack.prod.config.js --progress",
     "build-watch": "./node_modules/.bin/webpack --watch",
     "test": "mocha --recursive",
     "start": "node ./src/server/index.js",
-    "debug": "nodemon --inspect=9229 ./src/server/index.js",
-    "postinstall": "./node_modules/.bin/webpack -p --config ./webpack.prod.config.js --progress"
+    "debug": "nodemon --inspect=9229 ./src/server/index.js"
   },
   "author": "G. Hemingway",
   "license": "ISC"
