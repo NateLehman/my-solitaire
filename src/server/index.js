@@ -22,8 +22,9 @@ if (env !== 'test') app.use(logger('dev'));
 app.engine('pug', require('pug').__express);
 app.set('views', __dirname);
 // Setup pipeline session support
-const redisOptions = {
-    url: process.env['REDIS_URL']
+const redisOptions = env === 'production' ? { url: process.env['REDIS_URL'] } : {
+    host: 'localhost',
+    port: '32769'
 };
 app.use(session({
     name: 'session',
@@ -45,7 +46,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let options = {
     useMongoClient: true
 };
-mongoose.connect(process.env['MONGODB_URI'], options)
+const mongoURI = env === 'production' 
+    ? process.env['MONGO_URI'] 
+    : 'mongodb://localhost:32768/lehmann';
+mongoose.connect(mongoURI, options)
     .then(() => {
         console.log('\t MongoDB connected');
 
