@@ -47,7 +47,7 @@ let options = {
     useMongoClient: true
 };
 const mongoURI = env === 'production' 
-    ? process.env['MONGO_URI'] 
+    ? process.env['MONGODB_URI'] 
     : 'mongodb://localhost:32768/lehmann';
 mongoose.connect(mongoURI, options)
     .then(() => {
