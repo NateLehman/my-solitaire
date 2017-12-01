@@ -219,7 +219,7 @@ const initialValidMoves = (state, drawCount) => {
 };
 
 const nextValidMoves = (moves, move, state, drawCount) => {
-    const { dst, src, cards }
+    
 
     // so lets say the state is the state after a move.
 };
