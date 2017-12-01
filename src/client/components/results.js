@@ -27,13 +27,12 @@ class Results extends Component {
     }
 
     componentDidMount() {
-        $.ajax({ url: `/v1/game/${this.props.match.params.id}`})
-            .then(data => {
-                this.setState({ game: data });
-            }).fail(err => {
+        axios.get(`/v1/game/${this.props.match.params.id}`)
+            .then(({data}) => this.setState({game: data}))
+            .catch(err => {
                 let errorEl = document.getElementById('errorMsg');
-                errorEl.innerHTML = `Error: ${err.responseJSON.error}`;
-            });
+                errorEl.innerHTML = `Error: ${err.response.data.error}`;
+            })
     }
 
     render() {

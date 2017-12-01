@@ -25,16 +25,12 @@ class Start extends Component {
             draw: document.getElementById('draw').value,
             color: document.getElementById('color').value
         };
-        $.ajax({
-            url: "/v1/game",
-            method: "post",
-            data: data
-        }).then(data => {
-            this.props.history.push(`/game/${data.id}`);
-        }).fail(err => {
-            let errorEl = document.getElementById('errorMsg');
-            errorEl.innerHTML = `Error: ${err.responseJSON.error}`;
-        });
+        axios.post("/v1/game", data)
+            .then(({data}) => this.props.history.push(`/game/${data.id}`))
+            .catch(err => {
+                let errorEl = document.getElementById('errorMsg');
+                errorEl.innerHTML = `Error: ${err.response.data.error}`;
+            })
     }
 
     onChange(ev) {

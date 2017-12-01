@@ -19,17 +19,12 @@ class Login extends Component {
             username: document.getElementById('username').value,
             password: document.getElementById('password').value
         };
-        $.ajax({
-            url: "/v1/session",
-            method: "post",
-            data: data
-        }).then(data => {
-            this.props.user.logIn(this.props.history, data);
-        })
-        .fail(err => {
-            let errorEl = document.getElementById('errorMsg');
-            errorEl.innerHTML = `Error: ${err.responseJSON.error}`;
-        });
+        axios.post("/v1/session", data)
+            .then(({data}) => this.props.user.logIn(this.props.history, data))
+            .catch(err => {
+                let errorEl = document.getElementById('errorMsg');
+                errorEl.innerHTML = `Error: ${err.responseJSON.error}`;
+            });
     }
 
     render() {

@@ -9,7 +9,6 @@ module.exports = {
     entry: {
         main: "./main",
         vendor: [
-            "jquery",
             "lodash",
             "axios",
             "react",
@@ -49,8 +48,6 @@ module.exports = {
             debug: true
         }),
         new webpack.ProvidePlugin({
-            "$":        "jquery",
-            "jQuery":   "jquery",
             "_":        "lodash",
             "axios":    "axios",
         }),

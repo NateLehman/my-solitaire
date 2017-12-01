@@ -48,18 +48,14 @@ class Register extends Component {
             $error.html('Error: malformed username');
         } else if (pwdInvalid) {
             $error.html(`Error: ${pwdInvalid.error}`);
-        } else $.ajax({
-            url: "/v1/user",
-            method: "post",
-            data: data
-        })
+        } else axios.post("/v1/user", data)
             .then(() => {
                 this.props.history.push('/login');
             })
-            .fail(err => {
+            .catch(err => {
                 let errorEl = document.getElementById('errorMsg');
-                errorEl.innerHTML = `Error: ${err.responseJSON.error}`;
-            });
+                errorEl.innerHTML = `Error: ${err.response.data.error}`;
+            })
     }
 
     render() {

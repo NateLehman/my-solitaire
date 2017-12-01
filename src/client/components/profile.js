@@ -32,17 +32,12 @@ class Profile extends Component {
     }
 
     fetchUser(username) {
-        $.ajax({
-            url: `/v1/user/${username}`,
-            method: "get"
-        })
-            .then(data => {
-                this.setState({ user: data });
-            })
-            .fail(err => {
+        axios.get(`/v1/user/${username}`)
+            .then(({data}) => this.setState({user: data}))
+            .catch(err => {
                 let errorEl = document.getElementById('errorMsg');
-                errorEl.innerHTML = `Error: ${err.responseJSON.error}`;
-            });
+                errorEl.innerHTML = `Error: ${err.response.data.error}`;
+            })
     }
 
     componentDidMount() {

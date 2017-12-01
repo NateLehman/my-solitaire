@@ -59,29 +59,29 @@ class Game extends Component {
     componentDidMount() {
         this.props.dispatch(gameFetch(this.props.match.params.id));
 
-        $.ajax({
-            url: `/v1/game/${this.props.match.params.id}`
-        }).then(data => {
-            this.setState({
-                pile1: data.pile1,
-                pile2: data.pile2,
-                pile3: data.pile3,
-                pile4: data.pile4,
-                pile5: data.pile5,
-                pile6: data.pile6,
-                pile7: data.pile7,
-                stack1: data.stack1,
-                stack2: data.stack2,
-                stack3: data.stack3,
-                stack4: data.stack4,
-                draw: data.draw,
-                discard: data.discard,
-                drawCount: data.drawCount,
+        axios.get(`/v1/game/${this.props.match.params.id}`)
+            .then(res => {
+                this.setState({
+                    pile1: res.data.pile1,
+                    pile2: res.data.pile2,
+                    pile3: res.data.pile3,
+                    pile4: res.data.pile4,
+                    pile5: res.data.pile5,
+                    pile6: res.data.pile6,
+                    pile7: res.data.pile7,
+                    stack1: res.data.stack1,
+                    stack2: res.data.stack2,
+                    stack3: res.data.stack3,
+                    stack4: res.data.stack4,
+                    draw: res.data.draw,
+                    discard: res.data.discard,
+                    drawCount: res.data.drawCount,
+                });
+            })
+            .catch(err => {
+                // TODO: Should show a helpful error message that the game could not be found
+                console.log(err);
             });
-        }).fail(err => {
-            // TODO: Should show a helpful error message that the game could not be found
-            console.log(err);
-        });
     }
 
     canPlaceCardTableau(src, dest) {
@@ -190,9 +190,9 @@ class Game extends Component {
     }
 
     attemptMove({ cards, src, dst }) {
-        $.ajax({method: 'put', url: `/v1/game/${this.props.match.params.id}`, data: { cards, src, dst }})
-            .then(newState => this.setState(newState))
-            .catch(err => console.log(err));
+        axios.put(`/v1/game/${this.props.match.params.id}`, { cards, src, dst })
+            .then(({data}) => this.setState(data))
+            .catch(err => console.log(err.response.data.error));
     }
 
     attemptSelect({ pile, index }) {
