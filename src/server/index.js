@@ -10,8 +10,8 @@ let path            = require('path'),
     mongoose        = require('mongoose');
 
 mongoose.Promise = global.Promise;
-let port = process.env.PORT ? process.env.PORT : 80;
 let env = process.env.NODE_ENV ? process.env.NODE_ENV : 'dev';
+let port = process.env.PORT ? process.env.PORT : 8080;
 
 /**********************************************************************************************************/
 
@@ -22,10 +22,10 @@ if (env !== 'test') app.use(logger('dev'));
 app.engine('pug', require('pug').__express);
 app.set('views', __dirname);
 // Setup pipeline session support
-const redisOptions = env === 'production' ? { url: process.env['REDIS_URL'] } : {
+const redisOptions = (env === 'production' ? { url: process.env['REDIS_URL'] } : {
     host: 'localhost',
     port: '32769'
-};
+});
 app.use(session({
     name: 'session',
     store: new RedisStore(redisOptions),
