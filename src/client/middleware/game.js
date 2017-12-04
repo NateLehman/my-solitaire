@@ -43,7 +43,7 @@ export const gameMiddleware = ({ getState, dispatch }) => next => action => {
             dst: action.payload.pile
           };
           dispatch(gameMove(move, game.id));
-          dispatch(gameDeselect());
+          // dispatch(gameDeselect());
           return;
         }
       }
@@ -51,6 +51,13 @@ export const gameMiddleware = ({ getState, dispatch }) => next => action => {
       break;
     }
     case 'GAME_MOVE_REJECTED': {
+      dispatch(gameDeselect());
+      next(action);
+      break;
+    }
+    case 'GAME_MOVE_FULFILLED': {
+      dispatch(gameDeselect());
+      next(action);
       break;
     }
     default: {

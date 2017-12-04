@@ -174,7 +174,7 @@ module.exports = app => {
                 if (data.src.startsWith('pile') && data.dst.startsWith('stack')) {
                   points += 10;
                 }
-                if (data.src.startsWith('pile')) {
+                if (data.src.startsWith('pile') && nextState[data.src].length) {
                   if (currentState[data.src][nextState[data.src].length-1].up === false) {
                     points += 5;
                   }

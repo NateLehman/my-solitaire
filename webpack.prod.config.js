@@ -4,7 +4,7 @@ webpack =   require("webpack");
 
 module.exports = {
   cache: true,
-  devtool: "source-map",
+  devtool: "cheap-source-map",
   context: path.join(__dirname, "/src/client"),
   entry: {
     main: "./main",
@@ -53,6 +53,11 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendor",
       filename: "vendor.js"
-    })
+    }),
+    new webpack.DefinePlugin({
+      'process.env':{
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
   ]
 };

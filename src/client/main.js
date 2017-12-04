@@ -30,15 +30,15 @@ require('./app.css');
 
 /*************************************************************************/
 
+const middleware = process.env.NODE_ENV === 'production'
+    ? [gameMiddleware, promise(), logger]
+    : [gameMiddleware, promise()];
+
 const store = createStore(
     combineReducers({
         game: gameReducer
     }),
-    applyMiddleware(
-        gameMiddleware,
-        promise(),
-        logger
-    )
+    applyMiddleware(...middleware)
 );
 
 class MyApp extends Component {
@@ -51,9 +51,6 @@ class MyApp extends Component {
     }
 
     render() {
-
-
-
         return <Provider store={store}>
         <BrowserRouter>
             <div>

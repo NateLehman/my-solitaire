@@ -19,19 +19,21 @@ class Game extends Component {
         super(props);
 
         this.onBoardClick = this.onBoardClick.bind(this);
-        this.onKeyDown = this.onKeyDown.bind(this);
+        this.onKeyUp = this.onKeyUp.bind(this);
         this.genOnClick = this.genOnClick.bind(this);
     }
     
     componentDidMount() {
         this.props.dispatch(gameFetch(this.props.match.params.id));
+        document.addEventListener('keyup', this.onKeyUp, false);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('keydown', this.onKeyDown, false);
+        document.removeEventListener('keyup', this.onKeyUp, false);
     }
 
-    onKeyDown(ev) {
+    onKeyUp(ev) {
+        console.log(ev);
         switch(ev.key) {
             case 'z': {
                 this.props.dispatch(gameUndo(this.props.match.params.id));
@@ -59,7 +61,7 @@ class Game extends Component {
     }
 
     render() {
-        return <div style={{ height: '100%' }} onClick={this.onBoardClick} onKeyPress={this.onKeyPress}>
+        return <div style={{ height: '100%' }} onClick={this.onBoardClick}>
             <ButtonToolbar>
                 <Button
                     disabled={this.props.state.order === 0}
