@@ -21,7 +21,7 @@ On the Derby Day your application will be evaluated by a number of other student
 
 1. (10 points) Enable modification of a user's profile.  Must be saved back to the DB and viewable immediately by anyone else the going to the user's profile page and within the user's own header component.
 
-1. ___DONE___ (10 points) Fully working "results" page.  Must display information for every move. 
+1. ___DONE___ (10 points) Fully working "results" page.  Must display information for every move.
 
 1. ___DONE___ (30 points) If results page is fully working (see above), additional points can be earned if each move is click-able and renders the state of the game after the completion of the clicked move.  Game does not need to be playable from that rendering.
 
