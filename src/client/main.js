@@ -31,8 +31,8 @@ require('./app.css');
 /*************************************************************************/
 
 const middleware = process.env.NODE_ENV === 'production'
-    ? [gameMiddleware, promise(), logger]
-    : [gameMiddleware, promise()];
+    ? [gameMiddleware, promise()]
+    : [gameMiddleware, promise(), logger];
 
 const store = createStore(
     combineReducers({
