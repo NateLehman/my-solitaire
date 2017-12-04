@@ -1,6 +1,6 @@
 'use strict';
 
-import { gameDeselect, gameSelect, gameMove, gameInit, gameDraw } from '../actions/game';
+import { gameDeselect, gameSelect, gameMove, gameInit, gameDraw, gameAutoComp } from '../actions/game';
 
 export const gameMiddleware = ({ getState, dispatch }) => next => action => {
   switch (action.type) {
@@ -57,6 +57,21 @@ export const gameMiddleware = ({ getState, dispatch }) => next => action => {
     }
     case 'GAME_MOVE_FULFILLED': {
       dispatch(gameDeselect());
+      next(action);
+      break;
+    }
+    case 'GAME_AUTOCOMPLETE_FULFILLED': {
+      const { game } = getState();
+      let autoMoves = action.payload.data.availableMoves
+        .filter(move => (
+          move.src.startsWith('pile') || move.src === 'discard') 
+          && move.dst.startsWith('stack')
+        );
+      if (autoMoves.length) {
+        _.uniqBy(autoMoves, (move) => move.src)
+          .forEach(move => dispatch(gameMove(move, game.id)));
+          dispatch(gameAutoComp(game.id));
+      }
       next(action);
       break;
     }

@@ -20,7 +20,7 @@ export const gameMove = (move, gameID) => {
     type: 'GAME_MOVE',
     payload: axios.put(`/v2/game/${gameID}`, move).catch(err => {
       if (err.response.data.error === 'The requested move is invalid') {
-        // empty object since there's no move
+        // false object since there's no move
         return false;
       } else {
         return err; 
@@ -73,5 +73,12 @@ export const gameDeselect = () => {
 export const gameDraw = () => {
   return {
     type: 'GAME_DRAW',
+  };
+};
+
+export const gameAutoComp = (gameID) => {
+  return {
+    type: 'GAME_AUTOCOMPLETE',
+    payload: axios.get(`/v2/game/${gameID}`)
   };
 };

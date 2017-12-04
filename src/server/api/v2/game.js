@@ -109,6 +109,7 @@ module.exports = app => {
           state.stack3.length + 
           state.stack4.length
         );
+        results.availableMoves = game.availableMoves[game.stateIndex].toJSON().moves;
         results.moves = results.moves.filter((move, index) => index < results.finalIndex);
         res.status(200).send(_.extend(results, state));
       }

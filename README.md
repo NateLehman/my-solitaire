@@ -29,7 +29,7 @@ On the Derby Day your application will be evaluated by a number of other student
 
 1. (40 points) Register and log in via Github.  Offer users the ability register and login using the Github OAuth mechanism discussed in class.  You must never directly ask the user for their username, password, or any other information.  It must all be pulled from Github.
 
-1. (40 points) Autocomplete button.  Will play all valid moves from the piles to the stacks.  Must send (and validate) each move to the server.  Should be clickable at any time as long as there are valid moves.
+1. (40 points) Autocomplete button.  Will play all valid moves from the piles to the stacks.  Must send (and validate) each move to the server.  Should be clickable at any time as long as there are valid moves. ___DONE___
 
 1. (10 points) Recognize end of game, i.e. that there are no moves from piles to the stacks and that there are no useable moves from the discard pile to the stacks.  This recognition may miss rearrangements of the piles that would result in new moves becoming available.  So, if end-of-game is recognized, prompt user if they want to end game.
 

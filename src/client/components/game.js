@@ -2,17 +2,17 @@
 'use strict';
 
 
-import React, { Component }     from 'react';
-import { withRouter }           from 'react-router';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
-import { connect }                  from 'react-redux';
+import { connect } from 'react-redux';
 
-import { gameFetch, gameMove, gameUndo, gameRedo, gameClick } from '../actions/game';
+import { gameFetch, gameMove, gameUndo, gameRedo, gameClick, gameAutoComp } from '../actions/game';
 
 /*************************************************************************/
 
 import { Pile } from './pile';
-import { ButtonToolbar, Button } from 'react-bootstrap';
+import { ButtonGroup, Button, ButtonToolbar } from 'react-bootstrap';
 
 class Game extends Component {
     constructor(props) {
@@ -62,6 +62,7 @@ class Game extends Component {
     render() {
         return <div style={{ height: '100%' }} onClick={this.onBoardClick}>
             <ButtonToolbar>
+            <ButtonGroup bsSize="large">
                 <Button
                     disabled={this.props.state.order === 0}
                     onClick={
@@ -76,6 +77,13 @@ class Game extends Component {
                         () => this.props.dispatch(gameRedo(this.props.match.params.id))
                     }
                 >Redo</Button>
+            </ButtonGroup>
+            <Button 
+                bsSize="large"
+                bsStyle="primary"
+                onClick={() => this.props.dispatch(gameAutoComp(this.props.match.params.id))}>
+                Auto
+            </Button>
             </ButtonToolbar>
             <div className="card-row">
                 <Pile
