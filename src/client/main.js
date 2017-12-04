@@ -2,12 +2,12 @@
 "use strict";
 
 // Necessary modules
-import React, { Component }     from 'react';
-import { render }               from 'react-dom';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { Provider }                     from 'react-redux';
+import { Provider } from 'react-redux';
 import logger from 'redux-logger';
 import promise from 'redux-promise-middleware';
 
