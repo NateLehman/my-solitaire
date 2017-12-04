@@ -15,9 +15,9 @@ On the Derby Day your application will be evaluated by a number of other student
 
 ### Here are the places to earn (or lose) points
 
-1. (30 points - mandatory) Instructor code review.  Is it clean, well-structured, modular code.
+1. ___DONE___ (30 points - mandatory) Instructor code review.  Is it clean, well-structured, modular code.
 
-1. (20 points - mandatory) You need to deploy.  It must be publicly available on the general internet (not just on Vandy campus).  The IP address must not change for the 3 days prior to the Derby and during the entire Derby Day.  This means AWS is an excellent option, but not the only one.
+1. ___DONE___ (20 points - mandatory) You need to deploy.  It must be publicly available on the general internet (not just on Vandy campus).  The IP address must not change for the 3 days prior to the Derby and during the entire Derby Day.  This means AWS is an excellent option, but not the only one.
 
 1. (10 points) Enable modification of a user's profile.  Must be saved back to the DB and viewable immediately by anyone else the going to the user's profile page and within the user's own header component.
 
