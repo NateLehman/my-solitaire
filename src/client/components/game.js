@@ -33,7 +33,6 @@ class Game extends Component {
     }
 
     onKeyUp(ev) {
-        console.log(ev);
         switch(ev.key) {
             case 'z': {
                 this.props.dispatch(gameUndo(this.props.match.params.id));
