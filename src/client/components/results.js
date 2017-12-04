@@ -18,7 +18,7 @@ const Move = ({ move, index, handleClick }) => {
         <th>{move.id ? move.id : index + 1}</th>
         <th>{duration} ({exactDuration}s)</th>
         <th><Link onClick={(ev) => ev.stopPropagation()} to={`/profile/${move.player}`}>{move.player}</Link></th>
-        <th>{move.move}</th>
+        <th>{move.src} to {move.dst}</th>
     </tr>
 };
 
@@ -33,10 +33,9 @@ class Results extends Component {
     }
 
     componentDidMount() {
-        axios.get(`/v1/game/${this.props.match.params.id}`)
+        axios.get(`/v2/game/${this.props.match.params.id}`)
             .then(({data}) => this.setState({game: data}))
             .catch(err => {
-                console.log(err);
                 let errorEl = document.getElementById('errorMsg');
                 errorEl.innerHTML = `Error: ${err.response.data.error}`;
             });
@@ -45,7 +44,6 @@ class Results extends Component {
     render() {
         let moves = this.state.game.moves.map((move, index) => (
             <Move key={index} move={move} index={index} handleClick={() => {
-                console.log('fire');
                 this.props.dispatch(gameGoto(index, this.props.match.params.id));
                 this.props.history.push(`/game/${this.props.match.params.id}`);
             }}/>
