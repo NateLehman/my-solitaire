@@ -21,19 +21,19 @@ On the Derby Day your application will be evaluated by a number of other student
 
 1. (10 points) Enable modification of a user's profile.  Must be saved back to the DB and viewable immediately by anyone else the going to the user's profile page and within the user's own header component.
 
-1. (10 points) Fully working "results" page.  Must display information for every move. ___DONE___
+1. ___DONE___ (10 points) Fully working "results" page.  Must display information for every move. 
 
-1. (30 points) If results page is fully working (see above), additional points can be earned if each move is click-able and renders the state of the game after the completion of the clicked move.  Game does not need to be playable from that rendering. ___DONE___
+1. ___DONE___ (30 points) If results page is fully working (see above), additional points can be earned if each move is click-able and renders the state of the game after the completion of the clicked move.  Game does not need to be playable from that rendering.
 
-1. (10 points) Employ HTTPS with a CA issued certificate.  Must not pop any warnings or errors on users' Chrome browser. ___DONE___
+1. ___DONE___ (10 points) Employ HTTPS with a CA issued certificate.  Must not pop any warnings or errors on users' Chrome browser.
 
 1. (40 points) Register and log in via Github.  Offer users the ability register and login using the Github OAuth mechanism discussed in class.  You must never directly ask the user for their username, password, or any other information.  It must all be pulled from Github.
 
-1. (40 points) Autocomplete button.  Will play all valid moves from the piles to the stacks.  Must send (and validate) each move to the server.  Should be clickable at any time as long as there are valid moves. ___DONE___
+1. ___DONE___ (40 points) Autocomplete button.  Will play all valid moves from the piles to the stacks.  Must send (and validate) each move to the server.  Should be clickable at any time as long as there are valid moves.
 
 1. (10 points) Recognize end of game, i.e. that there are no moves from piles to the stacks and that there are no useable moves from the discard pile to the stacks.  This recognition may miss rearrangements of the piles that would result in new moves becoming available.  So, if end-of-game is recognized, prompt user if they want to end game.
 
-1. (10 points) Infinite undo/redo.  Two UI buttons that let the user undo all moves back to the start of the game.  This will require new REST API endpoints to properly handle game state.  The redo stack should always be cleared if the user plays a new move. ___DONE___
+1. ___DONE___ (10 points) Infinite undo/redo.  Two UI buttons that let the user undo all moves back to the start of the game.  This will require new REST API endpoints to properly handle game state.  The redo stack should always be cleared if the user plays a new move.
 
 1. (Automatic A For Person in Class) Full implement multiplayer Spades.  You crazy.
 
@@ -45,7 +45,7 @@ On the Derby Day your application will be evaluated by a number of other student
 
 * 10 points - Awarded to the one most attractive application as voted on by the other students.  A tie will split the points.
 
-* 10 points - Awarded to the one student with the smallest client JS bundle (```/public/main.js```).  A tie will split the points
+* ___98.5 kB check my webpack.prod...___ 10 points - Awarded to the one student with the smallest client JS bundle (```/public/main.js```).  A tie will split the points
 
 ## Submission
 
