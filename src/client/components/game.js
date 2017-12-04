@@ -190,7 +190,7 @@ class Game extends Component {
     }
 
     attemptMove({ cards, src, dst }) {
-        axios.put(`/v1/game/${this.props.match.params.id}`, { cards, src, dst })
+        axios.put(`/v2/game/${this.props.match.params.id}`, { cards, src, dst })
             .then(({data}) => this.setState(data))
             .catch(err => console.log(err.response.data.error));
     }

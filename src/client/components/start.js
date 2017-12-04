@@ -25,7 +25,7 @@ class Start extends Component {
             draw: document.getElementById('draw').value,
             color: document.getElementById('color').value
         };
-        axios.post("/v1/game", data)
+        axios.post("/v2/game", data)
             .then(({data}) => this.props.history.push(`/game/${data.id}`))
             .catch(err => {
                 let errorEl = document.getElementById('errorMsg');

@@ -39,13 +39,17 @@ let KlondikeMove = new Schema({
     'dst':      { type: String }
 }, { _id : false });
 
+let AvailableMoves = new Schema({
+    'moves': { type: [KlondikeMove] }
+})
+
 /* Schema for overall game - not completely Klondike specific */
 let Game = new Schema({
     owner:      { type: String, ref: 'User', required: true },
     start:      { type: Date },
     end:        { type: Date },
     state:      { type: [KlondikeGameState] },
-    availableMoves: { type: [KlondikeMove] },
+    availableMoves: [AvailableMoves],
     game:       { type: String, required: true, enum: [
         'klondike',
         'pyramid',

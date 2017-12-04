@@ -42,20 +42,19 @@ class Register extends Component {
             primary_email:  document.getElementById('primary_email').value,
             password:       document.getElementById('password').value
         };
-        let $error = $('#errorMsg');
+        let errorEl = document.getElementById('errorMsg');
         let pwdInvalid = Register.validPassword(data.password);
         if (!data.username || data.username.length > 16 || data.username.length < 6 || !data.username.match(/^[a-z0-9]+$/i)) {
-            $error.html('Error: malformed username');
+            errorEl.innerHTML = 'Error: malformed username';
         } else if (pwdInvalid) {
-            $error.html(`Error: ${pwdInvalid.error}`);
+            errorEl.innerHTML = `Error: ${pwdInvalid.error}`;
         } else axios.post("/v1/user", data)
             .then(() => {
                 this.props.history.push('/login');
             })
             .catch(err => {
-                let errorEl = document.getElementById('errorMsg');
                 errorEl.innerHTML = `Error: ${err.response.data.error}`;
-            })
+            });
     }
 
     render() {

@@ -23,7 +23,7 @@ class Login extends Component {
             .then(({data}) => this.props.user.logIn(this.props.history, data))
             .catch(err => {
                 let errorEl = document.getElementById('errorMsg');
-                errorEl.innerHTML = `Error: ${err.responseJSON.error}`;
+                errorEl.innerHTML = `Error: ${err.response.data.error}`;
             });
     }
 

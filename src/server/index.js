@@ -61,6 +61,7 @@ mongoose.connect(mongoURI, options)
 
         // Import our API Routes
         require('./api/v1/game')(app);
+        require('./api/v2/game')(app);
         require('./api/v1/user')(app);
         require('./api/v1/session')(app);
 

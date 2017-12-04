@@ -32,7 +32,7 @@ class Results extends Component {
             .catch(err => {
                 let errorEl = document.getElementById('errorMsg');
                 errorEl.innerHTML = `Error: ${err.response.data.error}`;
-            })
+            });
     }
 
     render() {
