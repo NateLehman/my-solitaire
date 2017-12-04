@@ -3,15 +3,21 @@
 
 import React, { Component }         from 'react';
 import { withRouter, Link }         from 'react-router-dom';
+import  moment                  from 'moment';
+
+import { connect }                  from 'react-redux';
+
+import { gameGoto }                 from '../actions/game';
 
 /*************************************************************************/
 
-const Move = ({ move, index }) => {
-    const duration = Date.now() - move.date;
-    return <tr>
+const Move = ({ move, index, handleClick }) => {
+    const duration = moment(move.start).from(move.end, true);
+    const exactDuration = moment(move.end).diff(move.start, 'seconds', true);
+    return <tr onClick={handleClick}>
         <th>{move.id ? move.id : index + 1}</th>
-        <th>{duration} seconds</th>
-        <th><Link to={`/profile/${move.player}`}>{move.player}</Link></th>
+        <th>{duration} ({exactDuration}s)</th>
+        <th><Link onClick={(ev) => ev.stopPropagation()} to={`/profile/${move.player}`}>{move.player}</Link></th>
         <th>{move.move}</th>
     </tr>
 };
@@ -30,6 +36,7 @@ class Results extends Component {
         axios.get(`/v1/game/${this.props.match.params.id}`)
             .then(({data}) => this.setState({game: data}))
             .catch(err => {
+                console.log(err);
                 let errorEl = document.getElementById('errorMsg');
                 errorEl.innerHTML = `Error: ${err.response.data.error}`;
             });
@@ -37,9 +44,13 @@ class Results extends Component {
 
     render() {
         let moves = this.state.game.moves.map((move, index) => (
-            <Move key={index} move={move} index={index}/>
+            <Move key={index} move={move} index={index} handleClick={() => {
+                console.log('fire');
+                this.props.dispatch(gameGoto(index, this.props.match.params.id));
+                this.props.history.push(`/game/${this.props.match.params.id}`);
+            }}/>
         ));
-        const duration = this.state.game.start ? (Date.now() - this.state.game.start) / 1000 : '--';
+        const duration = this.state.game.start ? moment().from(this.state.game.start, true) : '--';
         return <div className="row">
             <div className="center-block">
                 <p id="errorMsg" className="bg-danger"/>
@@ -55,7 +66,7 @@ class Results extends Component {
                         <p><b>Able to Move:</b></p>
                     </div>
                     <div className="col-xs-6">
-                        <p>{duration} seconds</p>
+                        <p>{duration}</p>
                         <p>{this.state.game.moves.length}</p>
                         <p>{this.state.game.score}</p>
                         <p>{this.state.game.cards_remaining}</p>
@@ -80,4 +91,8 @@ class Results extends Component {
     }
 }
 
-export default withRouter(Results);
+const ResultsConnect = connect(store => ({
+    game: store.game
+}))(Results);
+
+export default withRouter(ResultsConnect);

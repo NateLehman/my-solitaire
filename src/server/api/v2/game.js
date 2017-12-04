@@ -109,6 +109,7 @@ module.exports = app => {
           state.stack3.length + 
           state.stack4.length
         );
+        results.moves = results.moves.filter((move, index) => index < results.finalIndex);
         res.status(200).send(_.extend(results, state));
       }
     })
@@ -158,19 +159,46 @@ module.exports = app => {
                   order: currentMoves.order + 1
                 };
                 
+                let lastMoveEndTime = game.start;
+                if (game.stateIndex > 0) {
+                  lastMoveEndTime = game.moves[game.stateIndex - 1].end;
+                }
+
+                let points = game.score;
+                if (data.src === 'discard' && data.dst.startsWith('pile')) {
+                  points += 5;
+                }
+                if (data.src === 'discard' && data.dst.startsWith('stack')) {
+                  points += 10;
+                }
+                if (data.src.startsWith('pile') && data.dst.startsWith('stack')) {
+                  points += 10;
+                }
+                if (data.src.startsWith('pile')) {
+                  if (currentState[data.src][nextState[data.src].length-1].up === false) {
+                    points += 5;
+                  }
+                }
+                
                 game
                   .update({
                     $set: {
-                      [`moves.${nextState.order-1}`]: _.cloneDeep(data),
+                      [`moves.${nextState.order-1}`]: {
+                        ...data,
+                        start: lastMoveEndTime, 
+                        end: Date.now(),
+                        player: req.session.user.username
+                      },
                       [`state.${nextState.order}`]: _.cloneDeep(nextState),
                       [`availableMoves.${nextState.order}`]: nextMoves,
                       stateIndex: nextState.order,
-                      finalIndex: nextState.order
+                      finalIndex: nextState.order,
+                      score: points,
                     }
                   })
                   .then(() => {
                     res.status(201).send(
-                      nextState //
+                      nextState
                     );
                   }).catch(err => {
                     console.log(`Game.move failure: ${err.message}`);
@@ -253,6 +281,46 @@ module.exports = app => {
                     res.status(201).send(game.state[game.stateIndex + data.step].toJSON());
                   }).catch(err => {
                     console.log(`Game.redo failure: ${err.message}`);
+                  });
+                }
+              }
+            });
+        }
+      });
+    }
+  });
+
+  app.put('/v2/game/:id/goto', (req, res) => {
+    if (!req.session.user) {
+      res.status(401).send({ error: 'unauthorized' });
+    } else {
+      let schema = Joi.object().keys({
+        state: Joi.number().positive().default(1),
+      });
+      Joi.validate(req.body, schema, {stripUnknown: true}, (err, data) => {
+        if (err) {
+          const message = err.details[0].message;
+          console.log(`Game.goto validation failure: ${message}`);
+          res.status(400).send({error: message});
+        } else {
+          app.models.Game.findById(req.params.id)
+            .then(game => {
+              if (!game) {
+                res.status(404).send({error: `unknown game: ${req.params.id}`});
+              } else {
+                if (data.state > game.finalIndex) {
+                  res.status(400).send({error: 'state not in history'});
+                } else {
+                  game.update({
+                    $set: {
+                      stateIndex: data.state
+                    }
+                  }).then(() => {
+                    res.status(201).send(
+                      {...game.state[data.state].toJSON(), stateIndex: data.state}
+                    );
+                  }).catch(err => {
+                    console.log(`Game.goto failure: ${err.message}`);
                   });
                 }
               }

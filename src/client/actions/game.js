@@ -43,6 +43,13 @@ export const gameRedo = (gameID) => {
   };
 };
 
+export const gameGoto = (state, gameID) => {
+  return {
+    type: 'GAME_GOTO',
+    payload: axios.put(`/v2/game/${gameID}/goto`, {state}),
+  }
+}
+
 export const gameClick = (payload) => {
   return {
     type: 'GAME_CLICK',

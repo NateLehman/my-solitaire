@@ -47,6 +47,12 @@ export const gameReducer = (state = initialState, action) => {
       };
       break;
     }
+    case 'GAME_GOTO_FULFILLED': {
+      return {
+        ...state,
+        ...action.payload.data,
+      };
+    }
     case 'GAME_UNDO_FULFILLED':
       return {
         ...state,

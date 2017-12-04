@@ -38,8 +38,15 @@ let KlondikeGameState = new Schema({
 let KlondikeMove = new Schema({
     'cards':    { type: [CardState] },
     'src':      { type: String },
-    'dst':      { type: String }
+    'dst':      { type: String },
+    'start':    { type: Date },
+    'end':      { type: Date },
+    'player':   { type: String },
 }, { _id : false });
+
+KlondikeMove.pre('validate', function(next) {
+    next();
+});
 
 let AvailableMoves = new Schema({
     'order': { type: Number , default: 0},

@@ -14,7 +14,8 @@ module.exports = {
             "react",
             "react-dom",
             "react-router",
-            "react-bootstrap"
+            "react-bootstrap",
+            "moment",
         ]
     },
     output: {

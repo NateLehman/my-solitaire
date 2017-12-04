@@ -17,23 +17,6 @@ import { ButtonToolbar, Button } from 'react-bootstrap';
 class Game extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            startDrag: { x: 0, y: 0 },
-            pile1: [],
-            pile2: [],
-            pile3: [],
-            pile4: [],
-            pile5: [],
-            pile6: [],
-            pile7: [],
-            stack1: [],
-            stack2: [],
-            stack3: [],
-            stack4: [],
-            draw: [],
-            discard: [],
-            selected: null
-        };
 
         this.onBoardClick = this.onBoardClick.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
@@ -182,6 +165,6 @@ class Game extends Component {
 
 const GameConnect = connect(store => ({
     state: store.game
-}))(Game)
+}))(Game);
 
 export default withRouter(GameConnect);
