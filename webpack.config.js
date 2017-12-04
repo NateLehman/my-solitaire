@@ -13,7 +13,8 @@ module.exports = {
             "axios",
             "react",
             "react-dom",
-            "react-router"
+            "react-router",
+            "react-bootstrap"
         ]
     },
     output: {

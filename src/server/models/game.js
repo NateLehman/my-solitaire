@@ -17,6 +17,8 @@ let CardState = new Schema({
 
 /* Schema for overall hearts game state */
 let KlondikeGameState = new Schema({
+    order:      { type: Number, default: 0 },
+    front:      { type: Boolean, default: true },
     pile1:      { type: [ CardState ] },
     pile2:      { type: [ CardState ] },
     pile3:      { type: [ CardState ] },
@@ -40,8 +42,9 @@ let KlondikeMove = new Schema({
 }, { _id : false });
 
 let AvailableMoves = new Schema({
-    'moves': { type: [KlondikeMove] }
-})
+    'order': { type: Number , default: 0},
+    'moves': { type: [KlondikeMove] },
+}, {_id: false });
 
 /* Schema for overall game - not completely Klondike specific */
 let Game = new Schema({
@@ -49,6 +52,8 @@ let Game = new Schema({
     start:      { type: Date },
     end:        { type: Date },
     state:      { type: [KlondikeGameState] },
+    stateIndex: { type: Number, default: 0 },
+    finalIndex: { type: Number, default: 0 },
     availableMoves: [AvailableMoves],
     game:       { type: String, required: true, enum: [
         'klondike',

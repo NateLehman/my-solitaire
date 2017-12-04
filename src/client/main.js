@@ -13,6 +13,8 @@ import promise from 'redux-promise-middleware';
 
 import { gameReducer } from './reducers/game';
 
+import { gameMiddleware } from './middleware/game';
+
 import Header                   from './components/header';
 import Landing                  from './components/landing';
 import Login                    from './components/login';
@@ -33,8 +35,9 @@ const store = createStore(
         game: gameReducer
     }),
     applyMiddleware(
-        logger,
-        promise()
+        gameMiddleware,
+        promise(),
+        logger
     )
 );
 

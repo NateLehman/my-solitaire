@@ -77,6 +77,47 @@ module.exports = app => {
     });
   });
   
+  // Fetch game information
+  app.get('/v2/game/:id', (req, res) => {
+    if (!req.session.user) {
+      res.status(401).send({error: 'unauthorized'});
+      return;
+    }
+    
+    app.models.Game.findById(req.params.id)
+    .then(game => {
+      if (!game) {
+        res.status(404).send({error: `unknown game: ${req.params.id}`});
+      } else {
+        const state = game.state[game.stateIndex].toJSON();
+        const results = _.pick(
+          game.toJSON(),
+          'start',
+          'moves',
+          'winner',
+          'score',
+          'drawCount',
+          'color',
+          'active',
+          'stateIndex',
+          'finalIndex'
+        );
+        results.start = Date.parse(results.start);
+        results.cards_remaining = 52 - (
+          state.stack1.length + 
+          state.stack2.length + 
+          state.stack3.length + 
+          state.stack4.length
+        );
+        res.status(200).send(_.extend(results, state));
+      }
+    })
+    .catch(err => {
+      console.log(`Game.get failure: ${err}`);
+      res.status(404).send({error: `unknown game: ${req.params.id}`});
+    });
+  });
+  
   // attempt move
   app.put('/v2/game/:id', (req, res) => {
     if (!req.session.user) {
@@ -99,45 +140,125 @@ module.exports = app => {
           res.status(400).send({error: message});
         } else {
           app.models.Game.findById(req.params.id)
-            .select('state moves drawCount availableMoves')
-            .then(game => {
-              if (!game) {
-                res.status(404).send({error: `unknown game: ${req.params.id}`});
+          .then(game => {
+            if (!game) {
+              res.status(404).send({error: `unknown game: ${req.params.id}`});
+            } else {
+              const currentState = game.state[game.stateIndex].toObject();
+              const currentMoves = game.availableMoves[game.stateIndex].toObject();
+              const nextState = Solitare.validateMoveWithMoves(currentState, currentMoves.moves, data);
+              nextState.order = currentState.order + 1;
+              
+              if ('error' in nextState) {
+                console.log(`Game.move failure: ${nextState.error}`);
+                res.status(400).send({error: nextState.error});
               } else {
-                const currentState = {
-                  ..._.last(game.state).toObject(),
-                  drawCount: game.drawCount
+                const nextMoves = { 
+                  moves: _.cloneDeep(Solitare.initialValidMoves(nextState, game.drawCount)),
+                  order: currentMoves.order + 1
                 };
-                const currentMoves = _.last(game.availableMoves).toObject();
-                const nextState = Solitare.validateMoveWithMoves(currentState, currentMoves.moves, data);
-
-                if ('error' in nextState) {
-                  console.log(`Game.move failure: ${nextState.error}`);
-                  res.status(400).send({error: nextState.error});
-                } else {
-                  const nextMoves = {moves: _.cloneDeep(Solitare.initialValidMoves(nextState, game.drawCount))}
-
-                  game.update({
-                    $push: {
-                      state: _.cloneDeep(nextState),
-                      moves: _.cloneDeep(data),
-                      availableMoves: nextMoves,
+                
+                game
+                  .update({
+                    $set: {
+                      [`moves.${nextState.order-1}`]: _.cloneDeep(data),
+                      [`state.${nextState.order}`]: _.cloneDeep(nextState),
+                      [`availableMoves.${nextState.order}`]: nextMoves,
+                      stateIndex: nextState.order,
+                      finalIndex: nextState.order
                     }
-                  }).then(() => {
-                    res.status(201).send(nextState);
+                  })
+                  .then(() => {
+                    res.status(201).send(
+                      nextState //
+                    );
                   }).catch(err => {
                     console.log(`Game.move failure: ${err.message}`);
-                  })
-                }
+                  });
               }
-            }, err => {
-              console.log(`Game.move failure: ${err}`);
-              res.status(404).send({error: `unknown game: ${req.params.id}`});
-            });
+            }
+          }, err => {
+            console.log(`Game.move failure: ${err}`);
+            res.status(404).send({error: `unknown game: ${req.params.id}`});
+          });
         }
       });
     }
   });
   
-  
+  app.put('/v2/game/:id/undo', (req, res) => {
+    if (!req.session.user) {
+      res.status(401).send({ error: 'unauthorized' });
+    } else {
+      let schema = Joi.object().keys({
+        step: Joi.number().positive().default(1),
+      });
+      Joi.validate(req.body, schema, {stripUnknown: true}, (err, data) => {
+        if (err) {
+          const message = err.details[0].message;
+          console.log(`Game.undo validation failure: ${message}`);
+          res.status(400).send({error: message});
+        } else {
+          app.models.Game.findById(req.params.id)
+            .then(game => {
+              if (!game) {
+                res.status(404).send({error: `unknown game: ${req.params.id}`});
+              } else {
+                if (game.stateIndex < data.step) {
+                  res.status(400).send({error: 'state too far back'});
+                } else {
+                  game.update({
+                    $set: {
+                      stateIndex: game.stateIndex - data.step
+                    }
+                  }).then(() => {
+                    res.status(201).send(game.state[game.stateIndex - data.step].toJSON());
+                  }).catch(err => {
+                    console.log(`Game.undo failure: ${err.message}`);
+                  });
+                }
+              }
+            });
+        }
+      });
+    }
+  });
+
+  app.put('/v2/game/:id/redo', (req, res) => {
+    if (!req.session.user) {
+      res.status(401).send({ error: 'unauthorized' });
+    } else {
+      let schema = Joi.object().keys({
+        step: Joi.number().positive().default(1),
+      });
+      Joi.validate(req.body, schema, {stripUnknown: true}, (err, data) => {
+        if (err) {
+          const message = err.details[0].message;
+          console.log(`Game.redo validation failure: ${message}`);
+          res.status(400).send({error: message});
+        } else {
+          app.models.Game.findById(req.params.id)
+            .then(game => {
+              if (!game) {
+                res.status(404).send({error: `unknown game: ${req.params.id}`});
+              } else {
+                if (game.finalIndex - game.stateIndex < data.step) {
+                  res.status(400).send({error: 'state too far forward'});
+                } else {
+                  game.update({
+                    $set: {
+                      stateIndex: game.stateIndex + data.step
+                    }
+                  }).then(() => {
+                    res.status(201).send(game.state[game.stateIndex + data.step].toJSON());
+                  }).catch(err => {
+                    console.log(`Game.redo failure: ${err.message}`);
+                  });
+                }
+              }
+            });
+        }
+      });
+    }
+  });
 };
