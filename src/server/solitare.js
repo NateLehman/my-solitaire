@@ -136,57 +136,7 @@ let canPlaceCardFoundation = (src, dest) => {
         return false;
     }
     return true;
-}
-
-const validMoves = state => {
-    const tableauPiles = ['pile1', 'pile2', 'pile3', 'pile4', 'pile5', 'pile6', 'pile7'];
-    const foundationPiles = ['stack1', 'stack2', 'stack3', 'stack4'];
-    const discardPiles = ['discard'];
-    const singleMovePiles = foundationPiles.concat(['discard', 'draw']);
-    const moveFromPiles = tableauPiles.concat(singleMovePiles);
-    const moveToPiles = tableauPiles.concat(foundationPiles);
-
-    const selectionMoves = _.flattenDeep(moveFromPiles
-        .map(srcPile => state[srcPile]
-            .map((card, index) => ({ card, index }))
-            .filter(({ card, index }) => card.up)
-            .filter(({ card, index }) => singleMovePiles.includes(srcPile) 
-                ? _.isEqual(card, _.last(state[srcPile])) : true)
-            .map(({ card, index }) => moveToPiles
-                .filter(name => name !== srcPile)
-                .map(destPile => ({ pile: destPile, top: _.last(state[destPile]) }))
-                .filter(dest => (tableauPiles.includes(dest.pile)) 
-                    ? canPlaceCardTableau(card, dest.top) : true)
-                .filter(dest => (foundationPiles.includes(dest.pile))
-                    ? canPlaceCardFoundation(card, dest.top) : true)
-                .map(dest => ({cards: state[srcPile].slice(index), src: srcPile, dst: dest.pile})))));
-
-    const drawMove = state.draw.length 
-        ? { cards: _.takeRight(state.draw, state.drawCount).reverse(), src: 'draw', dst: 'discard' }
-        : { cards: [...state.discard].reverse(), src: 'discard', dst: 'draw' };
-
-    return [...selectionMoves, drawMove];
 };
-
-
-const validateMove = (state, requestedMove) => _.chain(validMoves(state))
-    .filter(_.matches(requestedMove))
-    .map(({ cards, src, dst }) => ({ 
-        [src]: _.chain(state[src])
-            .differenceWith(cards, _.isEqual)
-            .thru(remaining => (_.negate(_.eq)(src, 'draw') 
-                ? remaining.map((o, i) => (_.eq(i, remaining.length - 1)
-                    ? {...o, up: true} : o))
-                : remaining))
-            .value(),
-        [dst]: _.chain(state[dst])
-            .concat(cards.map(card => ({...card, up: !_.eq(dst, 'draw')})))
-            .value()}))
-    .thru((deltas) => (_.isEmpty(deltas)
-        ? {error: "The requested move is invalid"}
-        : {...state, ...deltas[0]}))
-    .value();
-
 
 const initialValidMoves = (state, drawCount) => {
     const tableauPiles = ['pile1', 'pile2', 'pile3', 'pile4', 'pile5', 'pile6', 'pile7'];
@@ -208,7 +158,7 @@ const initialValidMoves = (state, drawCount) => {
                 .filter(dest => (tableauPiles.includes(dest.pile)) 
                     ? canPlaceCardTableau(card, dest.top) : true)
                 .filter(dest => (foundationPiles.includes(dest.pile))
-                    ? canPlaceCardFoundation(card, dest.top) : true)
+                    ? (state[srcPile].length === (index + 1) && canPlaceCardFoundation(card, dest.top)) : true)
                 .map(dest => ({cards: state[srcPile].slice(index), src: srcPile, dst: dest.pile})))));
 
     const drawMove = state.draw.length 
@@ -241,7 +191,6 @@ module.exports = {
     shuffleCards: shuffleCards,
     initialState: initialState,
     filterForProfile: filterForProfile,
-    validateMove: validateMove,
     initialValidMoves: initialValidMoves,
     validateMoveWithMoves: validateMoveWithMoves,
 };
