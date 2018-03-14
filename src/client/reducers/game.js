@@ -1,4 +1,4 @@
-'use strict';
+
 
 const initialState = {
   startDrag: { x: 0, y: 0 },
@@ -16,36 +16,32 @@ const initialState = {
   draw: [],
   discard: [],
   selection: null,
-  fetched: false
+  fetched: false,
 };
 
-export const gameReducer = (state = initialState, action) => {
+const gameReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'GAME_SELECT': {
       const { pile, index } = action.payload;
       const isTableau = pile.startsWith('pile');
-      if (!state[pile].length) return state; // return false;
-      if (isTableau && state[pile][index].up !== true) return state;// return false;
+      if (!state[pile].length) return state;
+      if (isTableau && state[pile][index].up !== true) return state;
       const selection = (isTableau) ? state[pile].slice(index) : state[pile].slice(-1);
-      return {...state, selection: { pile: action.payload.pile, items: selection }};
-      break;
+      return { ...state, selection: { pile: action.payload.pile, items: selection } };
     }
     case 'GAME_DESELECT': {
-      return {...state, selection: null};
-      break;
+      return { ...state, selection: null };
     }
     case 'GAME_MOVE_FULFILLED': {
       if (!action.payload) {
         return state;
-      } else {
-        return {
-          ...state,
-          ...action.payload.data,
-          stateIndex: state.stateIndex + 1,
-          finalIndex: state.stateIndex + 1,
-        }
+      }
+      return {
+        ...state,
+        ...action.payload.data,
+        stateIndex: state.stateIndex + 1,
+        finalIndex: state.stateIndex + 1,
       };
-      break;
     }
     case 'GAME_GOTO_FULFILLED': {
       return {
@@ -59,29 +55,27 @@ export const gameReducer = (state = initialState, action) => {
         ...action.payload.data,
         stateIndex: state.stateIndex - 1,
       };
-      break;
     case 'GAME_REDO_FULFILLED': {
       return {
         ...state,
         ...action.payload.data,
         stateIndex: state.stateIndex + 1,
       };
-      break;
     }
     case 'GAME_INIT': {
-      return {...state, id: action.payload};
-      break;
+      return { ...state, id: action.payload };
     }
     case 'GAME_FETCH_FULFILLED': {
-      return {...state, ...action.payload.data, fetched: true};
-      break;
+      return { ...state, ...action.payload.data, fetched: true };
     }
     case 'GAME_FETCH_REJECTED': {
       break;
     }
     default: {
-      return {...state};
-      break;
+      return { ...state };
     }
   }
+  return { ...state };
 };
+
+export default gameReducer;

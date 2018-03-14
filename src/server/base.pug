@@ -10,6 +10,6 @@ html(lang="en")
         div#mainDiv
         // Inject initial state from server-side
         script.
-            window.__PRELOADED_STATE__ = !{state}
+            window.PRELOADED_STATE = !{state}
         script(src="/js/vendor.js")
         script(src="/js/main.js")
