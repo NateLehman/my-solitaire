@@ -57,7 +57,8 @@
     "less": "^2.7.2",
     "mocha": "^4.0.1",
     "node-sass": "^4.13.0",
-    "should": "^13.1.2"
+    "should": "^13.1.2",
+    "webpack-cli": "^3.3.10"
   },
   "scripts": {
     "build": "./node_modules/.bin/webpack",
