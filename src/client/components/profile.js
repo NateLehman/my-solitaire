@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { GravHash } from './header';
 
+import IPFS from 'ipfs';
+
 /** ********************************************************************** */
 
 const Game = ({ game, index }) => {
@@ -28,9 +30,44 @@ class Profile extends Component {
       user: {
         primary_email: '',
         games: [],
+        createNode: this.createNode,
       },
     };
   }
+
+  createNode() {
+      // Create the IPFS node instance
+
+      node = new IPFS({ repo: String(Math.random() + Date.now()) });
+
+      node.once('ready', () => {
+        console.log('IPFS node is ready');
+        (() => {
+          node.id((err, res) => {
+        if (err) {
+          throw err
+        }
+        self.setState({
+          id: res.id,
+          version: res.agentVersion,
+          protocol_version: res.protocolVersion
+        })
+      })
+
+      node.files.add([Buffer.from(stringToUse)], (err, filesAdded) => {
+        if (err) { throw err }
+
+        const hash = filesAdded[0].hash
+        self.setState({added_file_hash: hash})
+
+        node.files.cat(hash, (err, data) => {
+          if (err) { throw err }
+          self.setState({added_file_contents: data})
+        })
+      })
+        })()
+      })
+    }
 
   componentDidMount() {
     this.fetchUser(this.props.match.params.username);

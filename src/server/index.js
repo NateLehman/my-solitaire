@@ -1,13 +1,13 @@
 /* Copyright G. Hemingway, @2017 */
 
 
-let path = require('path'),
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  logger = require('morgan'),
-  session = require('express-session'),
-  RedisStore = require('connect-redis')(session),
-  mongoose = require('mongoose');
+const path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+const logger = require('morgan');
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'dev';

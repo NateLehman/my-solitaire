@@ -40,7 +40,7 @@ class Register extends Component {
     const pwdInvalid = Register.validPassword(data.password);
     if (!data.username || data.username.length > 16 || data.username.length < 6
       || !data.username.match(/^[a-z0-9]+$/i)) {
-      errorEl.innerHTML = 'Error: malformed username';
+      errorEl.innerHTML = 'Error: malformed username. Must be alphanumeric string between 6-16 characters';
     } else if (pwdInvalid) {
       errorEl.innerHTML = `Error: ${pwdInvalid.error}`;
     } else {
