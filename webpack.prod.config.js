@@ -63,7 +63,7 @@ module.exports = {
       _: 'lodash',
       axios: 'axios',
     }),
-    new webpack.optimize.CommonsChunkPlugin({
+    new config.optimization.splitChunks({
       name: 'vendor',
       filename: 'vendor.js',
     }),
