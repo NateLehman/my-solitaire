@@ -63,14 +63,22 @@ module.exports = {
       _: 'lodash',
       axios: 'axios',
     }),
-    new config.optimization.splitChunks({
-      name: 'vendor',
-      filename: 'vendor.js',
-    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
   ],
+  optimization: {
+    runtimeChunk: "single",
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendor",
+          chunks: "all"
+        }
+      }
+    }
+  }
 };
